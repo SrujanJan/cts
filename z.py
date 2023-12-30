@@ -5,6 +5,8 @@ import cv2
 import json
 import os
 import numpy as np
+from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
 
 # Initialize Roboflow
@@ -56,9 +58,11 @@ def upload():
     # Get the uploaded file
     file = request.files['file']
     result_list = []
-
+     # Generate a new filename with the desired prefix and original extension
+    original_filename, original_extension = os.path.splitext(secure_filename(file.filename))
+    new_filename = "custom_prefix" + original_extension
     # Save the file locally
-    file_path = "C:/Users/sruja/OneDrive/Desktop/ALL FILES/Flask/Images/" + file.filename
+    file_path = "C:/Users/sruja/OneDrive/Desktop/ALL FILES/Flask/Images/" + new_filename
     file.save(file_path)
     image = cv2.imread(file_path)
 
