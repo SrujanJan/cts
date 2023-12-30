@@ -81,7 +81,7 @@ def upload():
     cv2.imwrite(os.path.join(output_folder, 'gaussian_filtered_image.jpg'), gaussian_filtered)
     cv2.imwrite(os.path.join(output_folder, 'binary_image.jpg'), binary_image)
     # Perform prediction
-    file_binary_img='Images\binary_image.jpg'
+    file_binary_img='C:/Users/sruja/OneDrive/Desktop/ALL FILES/Flask/grayimg/binary_image.jpg'
     json_object = model.predict(file_binary_img, confidence=10, overlap=50).json()
     json_object["predictions"] = sorted(json_object["predictions"], key=lambda x: x["class_id"])
 
