@@ -60,9 +60,29 @@ def upload():
     # Save the file locally
     file_path = "C:/Users/sruja/OneDrive/Desktop/ALL FILES/Flask/Images/" + file.filename
     file.save(file_path)
+    image = cv2.imread(file_path)
 
+    # Grayscale operation
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Gaussian filtering
+    sigma = 1  # Adjust the value of sigma based on your requirement
+    gaussian_filtered = cv2.GaussianBlur(gray_image, (0, 0), sigma)
+
+    # Binary image conversion
+    _, binary_image = cv2.threshold(gaussian_filtered, 136, 255, cv2.THRESH_BINARY)
+
+    # Create the 'grayimg' folder if it doesn't exist
+    output_folder = 'grayimg'
+    os.makedirs(output_folder, exist_ok=True)
+
+    # Save the results in the 'grayimg' folder
+    cv2.imwrite(os.path.join(output_folder, 'gray_image.jpg'), gray_image)
+    cv2.imwrite(os.path.join(output_folder, 'gaussian_filtered_image.jpg'), gaussian_filtered)
+    cv2.imwrite(os.path.join(output_folder, 'binary_image.jpg'), binary_image)
     # Perform prediction
-    json_object = model.predict(file_path, confidence=10, overlap=50).json()
+    file_binary_img='Images\binary_image.jpg'
+    json_object = model.predict(file_binary_img, confidence=10, overlap=50).json()
     json_object["predictions"] = sorted(json_object["predictions"], key=lambda x: x["class_id"])
 
     # Save predictions to predictions.json
